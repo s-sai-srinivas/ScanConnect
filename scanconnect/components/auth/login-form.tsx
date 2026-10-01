@@ -38,7 +38,7 @@ export function LoginForm() {
     }
 
     const { data: business } = await supabase
-      .from("businesses")
+      .from("scanconnect_businesses")
       .select("id")
       .eq("owner_id", user.id)
       .maybeSingle();

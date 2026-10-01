@@ -31,13 +31,13 @@ export async function getPublicBusinessBySlug(
   } = await supabase.auth.getUser();
 
   const { data, error } = await supabase
-    .from("businesses")
+    .from("scanconnect_businesses")
     .select(
       `
       *,
-      menu_categories (
+      menu_categories:scanconnect_menu_categories (
         *,
-        menu_items (*)
+        menu_items:scanconnect_menu_items (*)
       )
     `
     )
@@ -71,13 +71,13 @@ export async function getBusinessByOwner(): Promise<BusinessWithMenu | null> {
   if (!user) return null;
 
   const { data } = await supabase
-    .from("businesses")
+    .from("scanconnect_businesses")
     .select(
       `
       *,
-      menu_categories (
+      menu_categories:scanconnect_menu_categories (
         *,
-        menu_items (*)
+        menu_items:scanconnect_menu_items (*)
       )
     `
     )

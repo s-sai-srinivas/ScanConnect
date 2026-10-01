@@ -18,7 +18,7 @@ function slugifyTableName(name: string): string {
 export async function listTables(businessId: string): Promise<QrTable[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("qr_tables")
+    .from("scanconnect_qr_tables")
     .select("*")
     .eq("business_id", businessId)
     .order("table_name");
@@ -31,7 +31,7 @@ export async function createTable(businessId: string, tableName: string) {
   const supabase = await createClient();
 
   const { count } = await supabase
-    .from("qr_tables")
+    .from("scanconnect_qr_tables")
     .select("*", { count: "exact", head: true })
     .eq("business_id", businessId);
 
@@ -41,7 +41,7 @@ export async function createTable(businessId: string, tableName: string) {
 
   let qrSlug = slugifyTableName(tableName);
   const { data: existing } = await supabase
-    .from("qr_tables")
+    .from("scanconnect_qr_tables")
     .select("qr_slug")
     .eq("business_id", businessId)
     .like("qr_slug", `${qrSlug}%`);
@@ -54,7 +54,7 @@ export async function createTable(businessId: string, tableName: string) {
   }
 
   const { data, error } = await supabase
-    .from("qr_tables")
+    .from("scanconnect_qr_tables")
     .insert({
       business_id: businessId,
       table_name: tableName.trim(),
@@ -70,7 +70,7 @@ export async function createTable(businessId: string, tableName: string) {
 
 export async function deleteTable(tableId: string) {
   const supabase = await createClient();
-  const { error } = await supabase.from("qr_tables").delete().eq("id", tableId);
+  const { error } = await supabase.from("scanconnect_qr_tables").delete().eq("id", tableId);
   if (error) return { error: error.message };
   revalidatePath("/dashboard/qr");
   return { success: true };

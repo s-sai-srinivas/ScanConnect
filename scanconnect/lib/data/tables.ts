@@ -7,7 +7,7 @@ export async function getTableBySlug(
 ): Promise<QrTable | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("qr_tables")
+    .from("scanconnect_qr_tables")
     .select("*")
     .eq("business_id", businessId)
     .eq("qr_slug", tableSlug)

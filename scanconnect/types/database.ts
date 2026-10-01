@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      businesses: {
+      scanconnect_businesses: {
         Row: {
           address: string | null;
           created_at: string | null;
@@ -78,7 +78,7 @@ export type Database = {
         };
         Relationships: [];
       };
-      menu_categories: {
+      scanconnect_menu_categories: {
         Row: {
           business_id: string;
           id: string;
@@ -99,7 +99,7 @@ export type Database = {
         };
         Relationships: [];
       };
-      menu_items: {
+      scanconnect_menu_items: {
         Row: {
           category_id: string;
           id: string;
@@ -135,7 +135,7 @@ export type Database = {
         };
         Relationships: [];
       };
-      profiles: {
+      scanconnect_profiles: {
         Row: {
           created_at: string | null;
           email: string | null;
@@ -159,7 +159,7 @@ export type Database = {
         };
         Relationships: [];
       };
-      qr_tables: {
+      scanconnect_qr_tables: {
         Row: {
           id: string;
           business_id: string;
@@ -183,7 +183,7 @@ export type Database = {
         };
         Relationships: [];
       };
-      scans: {
+      scanconnect_scans: {
         Row: {
           id: string;
           business_id: string;
@@ -204,7 +204,7 @@ export type Database = {
         };
         Relationships: [];
       };
-      interactions: {
+      scanconnect_interactions: {
         Row: {
           id: string;
           business_id: string;

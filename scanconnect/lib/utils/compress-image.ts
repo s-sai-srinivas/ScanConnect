@@ -20,7 +20,7 @@ export async function compressAndUploadImage(file: File, businessId: string): Pr
   const supabase = await createClient();
 
   const { error } = await supabase.storage
-    .from("menu-images")
+    .from("scanconnect-menu-images")
     .upload(filename, compressed, {
       contentType: "image/webp",
       upsert: false,
@@ -30,7 +30,7 @@ export async function compressAndUploadImage(file: File, businessId: string): Pr
 
   const {
     data: { publicUrl },
-  } = supabase.storage.from("menu-images").getPublicUrl(filename);
+  } = supabase.storage.from("scanconnect-menu-images").getPublicUrl(filename);
 
   return publicUrl;
 }

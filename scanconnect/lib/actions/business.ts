@@ -15,7 +15,7 @@ async function uniqueSlug(base: string): Promise<string> {
 
   while (true) {
     const { data } = await supabase
-      .from("businesses")
+      .from("scanconnect_businesses")
       .select("id")
       .eq("slug", candidate)
       .maybeSingle();
@@ -38,7 +38,7 @@ export async function createBusiness(input: {
   if (!user) return { error: "Not authenticated" };
 
   const existing = await supabase
-    .from("businesses")
+    .from("scanconnect_businesses")
     .select("id")
     .eq("owner_id", user.id)
     .maybeSingle();
@@ -47,7 +47,7 @@ export async function createBusiness(input: {
 
   const slug = await uniqueSlug(input.name);
   const { data: business, error } = await supabase
-    .from("businesses")
+    .from("scanconnect_businesses")
     .insert({
       name: input.name,
       slug,
@@ -66,12 +66,12 @@ export async function createBusiness(input: {
     sort_order: i,
   }));
 
-  const { error: catError } = await supabase.from("menu_categories").insert(categories);
+  const { error: catError } = await supabase.from("scanconnect_menu_categories").insert(categories);
   if (catError) return { error: catError.message };
 
   const { data: full } = await supabase
-    .from("businesses")
-    .select(`*, menu_categories (*)`)
+    .from("scanconnect_businesses")
+    .select(`*, menu_categories:scanconnect_menu_categories (*)`)
     .eq("id", business.id)
     .single();
 
@@ -96,7 +96,7 @@ export async function updateBusiness(
   }
 ) {
   const supabase = await createClient();
-  const { error } = await supabase.from("businesses").update(data).eq("id", id);
+  const { error } = await supabase.from("scanconnect_businesses").update(data).eq("id", id);
 
   if (error) return { error: error.message };
 
@@ -107,9 +107,9 @@ export async function updateBusiness(
 
 export async function togglePublish(id: string, published: boolean) {
   const supabase = await createClient();
-  const { data: biz } = await supabase.from("businesses").select("slug").eq("id", id).single();
+  const { data: biz } = await supabase.from("scanconnect_businesses").select("slug").eq("id", id).single();
   const { error } = await supabase
-    .from("businesses")
+    .from("scanconnect_businesses")
     .update({ is_published: published })
     .eq("id", id);
 
@@ -121,8 +121,8 @@ export async function togglePublish(id: string, published: boolean) {
 
 export async function toggleOpen(id: string, open: boolean) {
   const supabase = await createClient();
-  const { data: biz } = await supabase.from("businesses").select("slug").eq("id", id).single();
-  const { error } = await supabase.from("businesses").update({ is_open: open }).eq("id", id);
+  const { data: biz } = await supabase.from("scanconnect_businesses").select("slug").eq("id", id).single();
+  const { error } = await supabase.from("scanconnect_businesses").update({ is_open: open }).eq("id", id);
 
   if (error) return { error: error.message };
   if (biz?.slug) revalidatePath(`/b/${biz.slug}`);

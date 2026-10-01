@@ -7,11 +7,11 @@ import { compressAndUploadImage } from "@/lib/utils/compress-image";
 export async function createCategory(businessId: string, name: string) {
   const supabase = await createClient();
   const { count } = await supabase
-    .from("menu_categories")
+    .from("scanconnect_menu_categories")
     .select("*", { count: "exact", head: true })
     .eq("business_id", businessId);
 
-  const { error } = await supabase.from("menu_categories").insert({
+  const { error } = await supabase.from("scanconnect_menu_categories").insert({
     business_id: businessId,
     name,
     sort_order: count ?? 0,
@@ -24,7 +24,7 @@ export async function createCategory(businessId: string, name: string) {
 
 export async function updateCategory(id: string, name: string) {
   const supabase = await createClient();
-  const { error } = await supabase.from("menu_categories").update({ name }).eq("id", id);
+  const { error } = await supabase.from("scanconnect_menu_categories").update({ name }).eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/dashboard/menu");
   return { success: true };
@@ -32,7 +32,7 @@ export async function updateCategory(id: string, name: string) {
 
 export async function deleteCategory(id: string) {
   const supabase = await createClient();
-  const { error } = await supabase.from("menu_categories").delete().eq("id", id);
+  const { error } = await supabase.from("scanconnect_menu_categories").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/dashboard/menu");
   return { success: true };
@@ -46,11 +46,11 @@ export async function createMenuItem(input: {
 }) {
   const supabase = await createClient();
   const { count } = await supabase
-    .from("menu_items")
+    .from("scanconnect_menu_items")
     .select("*", { count: "exact", head: true })
     .eq("category_id", input.categoryId);
 
-  const { error } = await supabase.from("menu_items").insert({
+  const { error } = await supabase.from("scanconnect_menu_items").insert({
     category_id: input.categoryId,
     name: input.name,
     price: input.price,
@@ -74,7 +74,7 @@ export async function updateMenuItem(
   }
 ) {
   const supabase = await createClient();
-  const { error } = await supabase.from("menu_items").update(data).eq("id", id);
+  const { error } = await supabase.from("scanconnect_menu_items").update(data).eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/dashboard/menu");
   return { success: true };
@@ -82,7 +82,7 @@ export async function updateMenuItem(
 
 export async function deleteMenuItem(id: string) {
   const supabase = await createClient();
-  const { error } = await supabase.from("menu_items").delete().eq("id", id);
+  const { error } = await supabase.from("scanconnect_menu_items").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/dashboard/menu");
   return { success: true };
@@ -91,7 +91,7 @@ export async function deleteMenuItem(id: string) {
 export async function duplicateMenuItem(id: string) {
   const supabase = await createClient();
   const { data: item, error: fetchError } = await supabase
-    .from("menu_items")
+    .from("scanconnect_menu_items")
     .select("*")
     .eq("id", id)
     .single();
@@ -99,11 +99,11 @@ export async function duplicateMenuItem(id: string) {
   if (fetchError || !item) return { error: "Item not found" };
 
   const { count } = await supabase
-    .from("menu_items")
+    .from("scanconnect_menu_items")
     .select("*", { count: "exact", head: true })
     .eq("category_id", item.category_id);
 
-  const { error } = await supabase.from("menu_items").insert({
+  const { error } = await supabase.from("scanconnect_menu_items").insert({
     category_id: item.category_id,
     name: `${item.name} (Copy)`,
     price: item.price,
@@ -140,7 +140,7 @@ export async function reorderCategories(businessId: string, orderedIds: string[]
   const supabase = await createClient();
 
   const updates = orderedIds.map((id, index) =>
-    supabase.from("menu_categories").update({ sort_order: index }).eq("id", id).eq("business_id", businessId)
+    supabase.from("scanconnect_menu_categories").update({ sort_order: index }).eq("id", id).eq("business_id", businessId)
   );
 
   const results = await Promise.all(updates);
@@ -156,7 +156,7 @@ export async function reorderMenuItems(categoryId: string, orderedIds: string[])
   const supabase = await createClient();
 
   const updates = orderedIds.map((id, index) =>
-    supabase.from("menu_items").update({ sort_order: index }).eq("id", id).eq("category_id", categoryId)
+    supabase.from("scanconnect_menu_items").update({ sort_order: index }).eq("id", id).eq("category_id", categoryId)
   );
 
   const results = await Promise.all(updates);

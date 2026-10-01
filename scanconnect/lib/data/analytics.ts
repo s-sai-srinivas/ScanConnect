@@ -8,11 +8,11 @@ export async function getScanCounts(businessId: string) {
 
   const [totalResult, todayResult] = await Promise.all([
     supabase
-      .from("scans")
+      .from("scanconnect_scans")
       .select("*", { count: "exact", head: true })
       .eq("business_id", businessId),
     supabase
-      .from("scans")
+      .from("scanconnect_scans")
       .select("*", { count: "exact", head: true })
       .eq("business_id", businessId)
       .gte("created_at", today.toISOString()),

@@ -10,7 +10,7 @@ export async function logInteraction(
 ): Promise<void> {
   const supabase = await createClient();
 
-  const { error } = await supabase.from("interactions").insert({
+  const { error } = await supabase.from("scanconnect_interactions").insert({
     business_id: businessId,
     type,
     table_id: tableId ?? null,

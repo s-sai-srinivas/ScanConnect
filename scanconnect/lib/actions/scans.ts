@@ -8,7 +8,7 @@ export async function trackScan(
 ): Promise<void> {
   const supabase = await createClient();
 
-  const { error } = await supabase.from("scans").insert({
+  const { error } = await supabase.from("scanconnect_scans").insert({
     business_id: businessId,
     table_id: tableId ?? null,
   });
@@ -20,14 +20,14 @@ export async function trackScan(
 
   if (tableId) {
     const { data: table } = await supabase
-      .from("qr_tables")
+      .from("scanconnect_qr_tables")
       .select("scan_count")
       .eq("id", tableId)
       .single();
 
     if (table) {
       await supabase
-        .from("qr_tables")
+        .from("scanconnect_qr_tables")
         .update({ scan_count: (table.scan_count ?? 0) + 1 })
         .eq("id", tableId);
     }

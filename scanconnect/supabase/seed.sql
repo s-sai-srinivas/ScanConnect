@@ -1,5 +1,5 @@
 -- Demo cafe seed (owner_id null = system demo)
-INSERT INTO public.businesses (
+INSERT INTO public.scanconnect_businesses (
   id, name, slug, phone, whatsapp, address, opening_hours, menu_template,
   is_open, is_published, is_active
 ) VALUES (
@@ -14,13 +14,13 @@ INSERT INTO public.businesses (
   true, true, true
 ) ON CONFLICT (slug) DO NOTHING;
 
-INSERT INTO public.menu_categories (id, business_id, name, sort_order) VALUES
+INSERT INTO public.scanconnect_menu_categories (id, business_id, name, sort_order) VALUES
   ('b0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001', 'Coffee', 0),
   ('b0000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001', 'Snacks', 1),
   ('b0000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001', 'Desserts', 2)
 ON CONFLICT (id) DO NOTHING;
 
-INSERT INTO public.menu_items (category_id, name, price, is_veg, is_available, sort_order, image_url) VALUES
+INSERT INTO public.scanconnect_menu_items (category_id, name, price, is_veg, is_available, sort_order, image_url) VALUES
   ('b0000000-0000-0000-0000-000000000001', 'Espresso', 120, true, true, 0, 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=400&q=80'),
   ('b0000000-0000-0000-0000-000000000001', 'Cappuccino', 150, true, true, 1, 'https://images.unsplash.com/photo-1572442388796-11668a67e3d9?w=400&q=80'),
   ('b0000000-0000-0000-0000-000000000001', 'Cold Brew', 180, true, true, 2, 'https://images.unsplash.com/photo-1517701603779-8fc752b4232a?w=400&q=80'),
